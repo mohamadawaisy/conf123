@@ -31,6 +31,8 @@ var routes=function(){
         .get(manageController.putEntity)
         .delete(manageController.deleteEntity)
 
+    manageRouter.route('/image')
+        .put(manageController.removeImage)
     return manageRouter;
 
 }

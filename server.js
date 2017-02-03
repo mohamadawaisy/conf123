@@ -74,14 +74,28 @@ app.post('/api/upload', multipartMiddleware, function (req, resp) {
     console.log(req.body, req.files);
     var file = req.files.file;
 
-
-    var stream = cloudinary.uploader.upload_stream(function (file) {
+if(file) {
+    var stream = cloudinary.uploader.upload(req.files.file.path,function (result) {
         console.log(result);
-    });
-    var fileName = Math.floor((Math.random() * 10000) + 1) + '-' + 'filename';//file.originalFilename;
-    var file_reader = fs.createReadStream(fileName, {encoding: 'binary'})
-        .on('data', stream.write).on('end', stream.end);
+        if(result.errors)
+        {
+            console.log("Upload Failed. Error:\n" + result.errors);
+            resp.status(500).send({error: result.errors});
+        }
+        else
+        {
+            console.log("Upload Success. URL: " +  result.url);
+            resp.status(200).send({url: result.url});
+        }
 
+    });
+    // var fileName = Math.floor((Math.random() * 10000) + 1) + '-' + 'filename';//file.originalFilename;
+    // var file_reader = fs.createReadStream(fileName, {encoding: 'binary'})
+    //     .on('data', stream.write).on('end', stream.end);
+}
+else{
+    resp.status(500).send({error: "file is empty"});
+}
     // fs.readFile(file.path, function (err, data) {
     //     var fileName = Math.floor((Math.random() * 10000) + 1) + '-' + file.originalFilename;
     //     var params = {
