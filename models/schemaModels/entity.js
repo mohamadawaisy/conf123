@@ -26,6 +26,8 @@ var entity = new Schema({
         description: "",
         default: ""
     },
+
+    "introductionImageurlname": {type: String, default: ""},
     "introductionImage": {
         type: String,
         description: "",
@@ -47,6 +49,11 @@ var entity = new Schema({
         default: ""
     },
     "body": {
+        type: String,
+        description: "",
+        default: ""
+    },
+    "title": {
         type: String,
         description: "",
         default: ""
@@ -92,12 +99,35 @@ var entity = new Schema({
         type: Date,
         description: "", default: ""
     },
-    "headlineImages":[{"image":{type:String},"text1":{type:String},"text2":{type:String}}],
-        // {
-        //         type: String,
-        //         description: "",
-        //         default: ""
-        //     },
+    "images_Title" : {
+        type: String,
+        description: "",
+        default: ""
+    },
+    "headlineImages": [{
+        "image": {type: String},
+        "text1": {type: String},
+        "text2": {type: String},
+        "public_id": {type: String, default: ""}
+    }]
+
+    ,
+    "small_images_Title" : {
+        type: String,
+        description: "",
+        default: ""
+    },
+    "smallImages": [{
+        "image": {type: String},
+        "text1": {type: String},
+        "text2": {type: String},
+        "public_id": {type: String, default: ""}
+    }],
+    // {
+    //         type: String,
+    //         description: "",
+    //         default: ""
+    //     },
     // "images": [{type: JSON}],
 
     "headlineSmallImages": {
@@ -125,7 +155,7 @@ var entity = new Schema({
         type: Number,
         description: "", default: 0
     },
-    "gratitude": {
+    "longitude": {
         type: Number,
         description: "", default: 0
     },

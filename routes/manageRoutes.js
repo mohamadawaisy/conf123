@@ -10,6 +10,7 @@ var routes=function(){
     manageRouter.route('/categories')
         .post(manageController.postCategories)
         .get(manageController.getCategories)
+        .put(manageController.putCategoryByName)
 
 
     manageRouter.route('/categories/:name')
@@ -28,7 +29,7 @@ var routes=function(){
 
 
     manageRouter.route('/entity/:_id')
-        .get(manageController.putEntity)
+        .put(manageController.putEntity)
         .delete(manageController.deleteEntity)
 
     manageRouter.route('/image')

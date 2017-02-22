@@ -9,9 +9,10 @@ var routes=function(){
     var ionicController=require('../controllers/ionicController')();
     ionicRouter.route('/entity/:_id')
         .get(ionicController.getEntityById)
-
     ionicRouter.route('/entities')
         .get(ionicController.getEntities)
+    ionicRouter.route('/categories')
+        .get(ionicController.getCategories)
     return ionicRouter;
 
 }

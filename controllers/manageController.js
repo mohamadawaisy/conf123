@@ -5,7 +5,7 @@
 var Types = require('../models/schemaModels/type');
 var Entities = require('../models/schemaModels/entity');
 var _ = require('lodash');
-var underscore= require('underscore');
+var underscore = require('underscore');
 var cloudinary = require('cloudinary');
 
 var manageController = function () {
@@ -83,27 +83,35 @@ var manageController = function () {
     }
 
     var putCategoryByName = function (req, res) {
-        console.log("put types to category")
-        var query = {"category": req.params.name};
-        var types = req.body.types;
 
-        Types.findOne(query, function (err, type) {
-            if (err) {
-                console.log(err);
-                res.status(500).send(err);
-            }
-            else {
-                Types.update(query, types, {upsert: true}, function (err, result) {
-                    if (err) {
-                        console.log(err);
-                        res.status(500).send(err);
-                    }
-                    else {
-                        res.status(200).send(result);
-                    }
-                })
-            }
-        })
+        console.log("put types to category")
+        if (req.body.categories.length == 0)
+            res.status(500).send();
+        else {
+            var query = {"category": req.body.categories[0]};
+            var  previousTypes = req.body.Types;
+
+            Types.findOne(query, function (err, type) {
+                if (err) {
+                    console.log(err);
+                    res.status(500).send(err);
+                }
+                else {
+
+                    var merged=previousTypes.concat(type.types)
+                    var types = {"types":merged};
+                    Types.update(query, types, {upsert: true}, function (err, result) {
+                        if (err) {
+                            console.log(err);
+                            res.status(500).send(err);
+                        }
+                        else {
+                            res.status(200).send(result);
+                        }
+                    })
+                }
+            })
+        }
     }
 
     var getAllEntities = function (req, res) {
@@ -117,15 +125,22 @@ var manageController = function () {
                 if (result.length == 0)
                     res.status(200).send();
                 else {
-                    var x = _.map(result, '_id','name','visible','name', 'contactName', 'phone');
                     var results = underscore.map(
                         underscore.where(result, {}),
-                        function(item) {
-                            return { _id: item._id, name: item.name, visible:item.visible, type:item.type, contactName:item.contactName, phone:item.phone,introductionHead:item.introductionHead};
+                        function (item) {
+                            return {
+                                _id: item._id,
+                                name: item.name,
+                                visible: item.visible,
+                                type: item.type,
+                                contactName: item.contactName,
+                                phone: item.phone,
+                                introductionHead: item.introductionHead
+                            };
                         }
                     );
                     console.log(results);
-                    res.status(200).send({'data':results});
+                    res.status(200).send({'data': results});
                 }
             }
 
@@ -197,9 +212,9 @@ var manageController = function () {
 
     var putEntity = function (req, res) {
         console.log("update /api/entity/:id")
-        var query = {"category": req.params.id};
+        var query = {"_id": req.params._id};
         var updated = req.body;
-        Entity.findOne(query, function (err, entity) {
+        Entities.findOne(query, function (err, entity) {
             if (err) {
                 console.log(err);
                 res.status(500).send(err);
@@ -234,16 +249,21 @@ var manageController = function () {
             api_secret: 'j074P1XWuQN9o1T22CiQp86mpII'
         });
         cloudinary.uploader.destroy(public_id
-        , function (result) {
-            if (result.errors) {
-                console.log("deletion Failed. Error:\n" + result.errors);
-                res.status(500).send({error: result.errors});
-            }
-            else {
-                console.log("deletion Success. URL: " + result.url);
-                res.status(200).send({url: result.url});
-            }
-        });
+            , function (result) {
+                if (result.errors) {
+                    console.log("deletion Failed. Error:\n" + result.errors);
+                    res.status(500).send({error: result.errors});
+                }
+                else {
+                    console.log("deletion Success. URL: " + public_id);
+                    res.status(200).send({url: public_id});
+                }
+            });
+    }
+
+    var login = function (req, res) {
+
+
     }
     return {
         getCategories: getCategories,

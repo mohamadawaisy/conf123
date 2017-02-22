@@ -10,6 +10,7 @@ var express = require('express'),
 var Types = require('./models/schemaModels/type');
 var Entities = require('./models/schemaModels/entity');
 var User = require('./models/schemaModels/user');
+var UserToken = require('./models/userToken');
 
 var Config = require('./config');
 var db = mongoose.connect('mongodb://wael1233:uknownoth@ds151068.mlab.com:51068/kblanem');
@@ -61,6 +62,25 @@ app.use(function (req, res, next) {//__setxhr_
 });
 app.use('/', mainRouter());
 
+
+app.use('/api/manage', function (req, res, next) {
+
+    if (req.header("x-access-token")) {
+        var userAccessToken = new UserToken(req.header("x-access-token"), false);
+        if (userAccessToken.isNotExpired()) {
+            next();
+        } else {
+            console.log("login expired");
+            res.status(401).send();
+
+        }
+    } else {
+        console.log("login failed");
+        res.status(401).send();
+    }
+});
+
+
 app.use('/api/manage', manageRoutes());
 app.use('/api/io', ionicRoutes());
 
@@ -85,7 +105,7 @@ if(file) {
         else
         {
             console.log("Upload Success. URL: " +  result.url);
-            resp.status(200).send({url: result.url});
+            resp.status(200).send({url: result.url,public_id:result.public_id});
         }
 
     });
