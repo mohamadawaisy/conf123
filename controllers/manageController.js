@@ -18,7 +18,7 @@ var manageController = function () {
             }
             else {
                 console.log(result);
-                res.status(200).send(result);
+                res.status(200).send({"data":result});
             }
 
         })

@@ -10,9 +10,17 @@ var ionicController = function (req, res) {
 
 
     var getEntities = function (req, res) {
-        Entities.find({"visible": true}, function (err, result) {
+        var category=req.params.category;
+        var type=req.params.type;
+        if(!category && !type)
+        {
+            res.status(500).send();
+        }
+        else{
+        Entities.find({"visible": true,'category':category,'type':type}, function (err, result) {
+
             if (err) {
-                // console.log(err);
+                console.log(err);
                 res.status(500).send();
             }
             else {
@@ -34,7 +42,7 @@ var ionicController = function (req, res) {
                 }
             }
 
-        })
+        })}
     }
 
     var getEntityById = function (req, res) {
