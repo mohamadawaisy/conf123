@@ -1,8 +1,8 @@
 /**
  * Created by wael on 29/01/2017.
  */
-var Types = require('../models/schemaModels/type')
-var Entities = require('../models/schemaModels/entity')
+var Types = require('../models/schemaModels/confession')
+var Entities = require('../models/schemaModels/confession')
 var _ = require('lodash')
 
 

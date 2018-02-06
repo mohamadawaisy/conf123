@@ -8,7 +8,7 @@ var express = require('express'),
 
 
 var Types = require('./models/schemaModels/type');
-var Entities = require('./models/schemaModels/entity');
+var Confession = require('./models/schemaModels/confession');
 var User = require('./models/schemaModels/user');
 var UserToken = require('./models/userToken');
 
@@ -60,24 +60,24 @@ app.use(function (req, res, next) {//__setxhr_
         next();
     }
 });
-app.use('/', mainRouter());
+// app.use('/', mainRouter());
 
 
 app.use('/api/manage', function (req, res, next) {
 
-    if (req.header("x-access-token")) {
-        var userAccessToken = new UserToken(req.header("x-access-token"), false);
-        if (userAccessToken.isNotExpired()) {
+    // if (req.header("x-access-token")) {
+    //     var userAccessToken = new UserToken(req.header("x-access-token"), false);
+    //     if (userAccessToken.isNotExpired()) {
             next();
-        } else {
-            console.log("login expired");
-            res.status(401).send();
+    //     } else {
+    //         console.log("login expired");
+    //         res.status(401).send();
 
-        }
-    } else {
-        console.log("login failed");
-        res.status(401).send();
-    }
+    //     }
+    // } else {
+    //     console.log("login failed");
+    //     res.status(401).send();
+    // }
 });
 
 

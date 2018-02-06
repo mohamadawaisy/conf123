@@ -3,7 +3,7 @@
  */
 
 var Types = require('../models/schemaModels/type');
-var Entities = require('../models/schemaModels/entity');
+var Confessions = require('../models/schemaModels/confession');
 var _ = require('lodash');
 var underscore = require('underscore');
 var cloudinary = require('cloudinary');
@@ -23,6 +23,47 @@ var manageController = function () {
 
         })
 
+    }
+
+    var postConfession = function (req, res) {
+        var t = new Confessions(req.body);
+        t.save(function (err, result) {
+            if (err) {
+                console.log(err);
+                res.status(500).send(err);
+            }
+            else {
+                res.status(201).send(result);
+            }
+
+        })
+    }
+
+    var putConfession = function (req, res) {
+        console.log("put types to confessions")
+        var query = {"Confessions": req.body.confessionTxt};
+        var types = req.body.Types;
+
+        Types.findOne(query, function (err, type) {
+            if (err) {
+                console.log(err);
+                res.status(500).send(err);
+            }
+            else {
+                type.types = type.types.concat(types);
+                Types.update(query, type, {upsert: true}, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        res.status(500).send(err);
+                    }
+                    else {
+                        console.log(result);
+                        res.status(200).send(result);
+                    }
+
+                })
+            }
+        })
     }
 
     var postCategories = function (req, res) {
@@ -114,9 +155,9 @@ var manageController = function () {
         }
     }
 
-    var getAllEntities = function (req, res) {
+    var getAllConfessions = function (req, res) {
         console.log("api/allentities start get")
-        Entities.find({}, function (err, result) {
+        Confessions.find({} , function (err, result) {
             if (err) {
                 console.log(err);
                 res.status(500).send();
@@ -128,15 +169,16 @@ var manageController = function () {
                     var results = underscore.map(
                         underscore.where(result, {}),
                         function (item) {
-                            return {
-                                _id: item._id,
-                                name: item.name,
-                                visible: item.visible,
-                                type: item.type,
-                                contactName: item.contactName,
-                                phone: item.phone,
-                                introductionHead: item.introductionHead
-                            };
+                            var distance = Math.sqrt(Math.pow(req.body.longitude - item.longitude,2) +  Math.pow(req.body.latitude - item.latitude,2));
+                            var radius = item.radius;
+                            if(distance<=radius)
+                            {
+                                return {
+                                    _id: item._id,
+                                    confessionTxt: item.confessionTxt,
+                                };
+                            }
+
                         }
                     );
                     console.log(results);
@@ -266,17 +308,18 @@ var manageController = function () {
 
     }
     return {
-        getCategories: getCategories,
-        postCategories: postCategories,
-        putCategories: putCategories,
-        deleteCategoryByName: deleteCategoryByName,
-        putCategoryByName: putCategoryByName,
-        getAllEntities: getAllEntities,
-        getEntityById: getEntityById,
-        postEntity: postEntity,
-        deleteEntity: deleteEntity,
-        putEntity: putEntity,
-        removeImage: removeImage
+      //  getCategories: getCategories,
+     //   postCategories: postCategories,
+        postConfession: postConfession,
+        putConfession: putConfession,
+     //   deleteCategoryByName: deleteCategoryByName,
+     //   putCategoryByName: putCategoryByName,
+        getAllConfessions: getAllConfessions,
+      //  getEntityById: getEntityById,
+      //  postEntity: postEntity,
+       // deleteEntity: deleteEntity,
+       // putEntity: putEntity,
+       // removeImage: removeImage
     }
 
 }
