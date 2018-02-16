@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/.idea/conf123-master.iml" filepath="$PROJECT_DIR$/.idea/conf123-master.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/.idea/sbe.iml" filepath="$PROJECT_DIR$/.idea/sbe.iml" />
+>>>>>>> cec46b1c89d0df858764689ddcb927e38e87a34f
     </modules>
   </component>
 </project>
