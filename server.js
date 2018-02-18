@@ -5,7 +5,7 @@ var express = require('express'),
     mongoose = require('mongoose'),
     bodyParser = require('body-parser'),
     multipart = require('connect-multiparty')
-
+   
 
 var Types = require('./models/schemaModels/type');
 var Confession = require('./models/schemaModels/confession');
@@ -13,7 +13,7 @@ var User = require('./models/schemaModels/user');
 var UserToken = require('./models/userToken');
 
 var Config = require('./config');
-var db = mongoose.connect('mongodb://wael1233:uknownoth@ds151068.mlab.com:51068/kblanem');
+var db = mongoose.connect('mongodb://saedUser2018:054ilikeit@ds012058.mlab.com:12058/confessiondb2018');//mongodb://wael1233:uknownoth@ds151068.mlab.com:51068/kblanem
 var app = express();
 var port = process.env.PORT || 7020;
 

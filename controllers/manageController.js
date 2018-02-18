@@ -154,6 +154,18 @@ var manageController = function () {
             })
         }
     }
+    function measure(lat1, lon1, lat2, lon2){  // generally used geo measurement function
+        var R = 6378.137; // Radius of earth in KM
+        var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+        var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        var d = R * c;
+        return d * 1000; // meters
+    }
+
 
     var getAllConfessions = function (req, res) {
         console.log("api/allentities start get")
@@ -169,9 +181,10 @@ var manageController = function () {
                     var results = underscore.map(
                         underscore.where(result, {}),
                         function (item) {
-                            var distance = Math.sqrt(Math.pow(req.body.longitude - item.longitude,2) +  Math.pow(req.body.latitude - item.latitude,2));
-                            var radius = item.radius;
-                            if(distance<=radius)
+                            var distance = measure(req.body.latitude,req.body.longitude,item.latitude,item.longitude);
+                            // var distance = Math.sqrt(Math.pow(req.body.longitude - item.longitude,2) +  Math.pow(req.body.latitude - item.latitude,2));
+                            // var radius = item.radius;
+                            if(distance<=100)
                             {
                                 return {
                                     _id: item._id,
